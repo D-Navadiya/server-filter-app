@@ -18,6 +18,7 @@ module.exports = {
     'comma-dangle': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-throw-literal': 'off',
+    'import/prefer-default-export': 'off',
   },
   globals: {
     fetch: false,

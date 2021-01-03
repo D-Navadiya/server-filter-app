@@ -1,7 +1,10 @@
 import { StyleSheet } from 'react-native';
 import merge from 'lodash/merge';
 
-import { storageRangeSliderData } from 'src/constants/DataFiltrationConstants';
+import {
+  storageRangeSliderData,
+  storageUnits,
+} from 'src/constants/DataFiltrationConstants';
 
 export const styleCreator = (styles) => StyleSheet.create(styles);
 
@@ -29,3 +32,80 @@ export const getRangeSliderLabelText = (dataIndex) => {
 };
 
 export const getRamOptionLabel = (option) => `${option} GB`;
+
+export const convertToGb = (tb) => 1000 * tb;
+
+export const getServerStorageByCellInGbs = (cellData) => {
+  const isTb = cellData.includes(storageUnits.tb);
+  const hddCount = Number(cellData[0]);
+  const separator = 'x';
+  const sepArray = cellData.split(separator);
+  let totalGbs = 0;
+
+  if (isTb) {
+    const tbs = Number(sepArray[1].split(storageUnits.tb)[0]);
+    totalGbs = convertToGb(hddCount * tbs);
+  } else {
+    const gbs = Number(sepArray[1].split(storageUnits.gb)[0]);
+    totalGbs = hddCount * gbs;
+  }
+
+  return totalGbs;
+};
+
+export const getStorageRangeInGbs = ({
+  selectedLowIndex,
+  selectedHighIndex,
+}) => {
+  const selectedLowRangeData = storageRangeSliderData[selectedLowIndex];
+  const selectedHighRangeData = storageRangeSliderData[selectedHighIndex];
+  const isLowRangeInTb = selectedLowRangeData.type === storageUnits.tb;
+  const isHighRangeInTb = selectedHighRangeData.type === storageUnits.tb;
+  let lowRangeInGbs = selectedLowRangeData.value;
+  let highRangeInGbs = selectedHighRangeData.value;
+  if (isLowRangeInTb) {
+    lowRangeInGbs = convertToGb(selectedLowRangeData.value);
+  }
+  if (isHighRangeInTb) {
+    highRangeInGbs = convertToGb(selectedHighRangeData.value);
+  }
+  return {
+    lowRangeInGbs,
+    highRangeInGbs,
+  };
+};
+
+export const testStorageRangeCondition = (
+  serverStorageInGbs,
+  { lowRangeInGbs, highRangeInGbs },
+) =>
+  lowRangeInGbs < serverStorageInGbs < highRangeInGbs ||
+  lowRangeInGbs === serverStorageInGbs ||
+  serverStorageInGbs === highRangeInGbs;
+
+export const getServerRamByCell = (cellData) => {
+  const separator = storageUnits.gb;
+  const sepArray = cellData.split(separator);
+  return Number(sepArray[0]);
+};
+
+export const testServerRamCondition = (serverRam, ramOptions) => {
+  if (ramOptions.length) {
+    return ramOptions.includes(serverRam);
+  }
+  return true;
+};
+
+export const testHddTypeByCell = (cellData, selectedHddType) => {
+  if (selectedHddType) {
+    return cellData.includes(selectedHddType?.toUpperCase());
+  }
+  return true;
+};
+
+export const testLocationByCell = (cellData, selectedLocation) => {
+  if (selectedLocation) {
+    return cellData === selectedLocation;
+  }
+  return true;
+};

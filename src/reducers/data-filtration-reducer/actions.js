@@ -1,0 +1,7 @@
+export const STORAGE_CAPACITY = 'STORAGE_CAPACITY';
+
+export const RAM_OPTION = 'RAM_OPTION';
+
+export const HDD_OPTION = 'HDD_OPTION';
+
+export const LOCATION_OPTION = 'LOCATION_OPTION';

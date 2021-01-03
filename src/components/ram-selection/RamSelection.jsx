@@ -5,8 +5,8 @@ import { ramOptions } from 'src/constants/DataFiltrationConstants';
 
 import { getRamOptionLabel } from 'src/helpers';
 import { generalConsts } from 'src/constants/GenericConstants';
-import Checkbox from 'src/components/checkbox';
-import FieldTitle from 'src/components/field-title';
+import FieldTitle from '../field-title';
+import Checkbox from '../checkbox';
 import iConstants from './RamSelection.constants';
 import styles from './RamSelection.styles';
 
@@ -27,14 +27,20 @@ const RamSelection = ({ selectedRamOptions, setSelectedRamOption }) => {
         titleText={iConstants.titleText}
         snContainer={styles.RamSelection_fieldTitleContainer}
       />
-      {ramOptions.map((option) => (
-        <Checkbox
-          key={`${iConstants.ramOptionKeyPrefix}${generalConsts.slugSeparator}${option}`}
-          label={getRamOptionLabel(option)}
-          checked={selectedRamOptions.includes(option)}
-          handleOnPress={() => handleOnCheckboxPress(option)}
-        />
-      ))}
+      <View style={styles.RamSelection_ramOptionsViewContainer}>
+        {ramOptions.map((option) => (
+          <View
+            style={styles.RamSelection_ramOptionViewContainer}
+            key={`${iConstants.ramOptionKeyPrefix}${generalConsts.slugSeparator}${option}`}
+          >
+            <Checkbox
+              label={getRamOptionLabel(option)}
+              checked={selectedRamOptions.includes(option)}
+              handleOnPress={() => handleOnCheckboxPress(option)}
+            />
+          </View>
+        ))}
+      </View>
     </View>
   );
 };

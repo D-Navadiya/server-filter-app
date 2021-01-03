@@ -56,6 +56,12 @@ export const storageRangeSliderData = Object.freeze([
 
 export const ramOptions = Object.freeze([2, 4, 8, 12, 16, 24, 32, 48, 64, 96]);
 
+export const hddOptions = Object.freeze([
+  { label: 'SAS', value: 'sas' },
+  { label: 'SATA', value: 'sata' },
+  { label: 'SSD', value: 'ssd' },
+]);
+
 export const staticListKeys = Object.freeze({
   accessArrayKey: 'static-server-list',
 });
@@ -68,7 +74,7 @@ export const dataKeys = Object.freeze({
   price: 'Price',
 });
 
-export const columns = Object.freeze([
+export const dataTableColumns = Object.freeze([
   { key: dataKeys.model, name: 'MODEL' },
   { key: dataKeys.ram, name: 'RAM' },
   { key: dataKeys.hdd, name: 'HDD' },

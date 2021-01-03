@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import Slider from 'rn-range-slider';
 
 import { getRangeSliderLabelText } from 'src/helpers';
-import FieldTitle from 'src/components/field-title';
+import FieldTitle from '../field-title';
 import Thumb from './custom-slider-components/Thumb';
 import Rail from './custom-slider-components/Rail';
 import RailSelected from './custom-slider-components/RailSelected';

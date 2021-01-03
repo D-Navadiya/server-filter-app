@@ -4,10 +4,10 @@ import ThemingStore from 'utils/ThemingStore';
 const { spacing } = ThemingStore.currentTheme;
 
 export default styleCreator({
-  FilterSettingsScreen_searchBtn: {
-    marginTop: spacing,
+  HddSelection_container: {
+    marginBottom: spacing,
   },
-  FilterSettingsScreen_paddedView: {
-    height: 20,
+  HddSelection_fieldText: {
+    marginBottom: spacing,
   },
 });

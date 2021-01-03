@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import slugify from 'slugify';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { columns, dataKeys } from 'src/constants/DataFiltrationConstants';
+import {
+  dataTableColumns,
+  dataKeys,
+} from 'src/constants/DataFiltrationConstants';
 import { generalConsts } from 'src/constants/GenericConstants';
-import StaticServerListArray from 'utils/DataFiltration';
+import LoaderViewWrapper from 'src/components/loader-view-wrapper';
+import { filterDataAccToParams } from 'utils/DataFiltration';
 import iConstants from './FilterServerScreen.constants';
-import styles from './FilterServerScreen.styles';
 
 const DataTableTitle = () =>
-  columns.map((column) => {
+  dataTableColumns.map((column) => {
     const key = `${iConstants.tableTitleKeyPrefix}${generalConsts.slugSeparator}${column.key}`;
     return (
       <DataTable.Title key={key} numeric={column.numeric}>
@@ -26,7 +30,7 @@ const DataTableHeader = () => (
 );
 
 const DataTableCell = ({ serverItem }) =>
-  columns.map((column) => {
+  dataTableColumns.map((column) => {
     const key = `${iConstants.tableCellKeyPrefix}${generalConsts.slugSeparator}${column.key}`;
     return (
       <DataTable.Cell key={key} numeric={column.numeric}>
@@ -43,10 +47,10 @@ const flatListItem = ({ item }) => {
   );
 };
 
-const DataTableRows = () => (
+const DataTableRows = ({ tableData }) => (
   // to lazy load the items
   <FlatList
-    data={StaticServerListArray}
+    data={tableData}
     renderItem={flatListItem}
     keyExtractor={flatListKeyExtractor}
   />
@@ -62,20 +66,34 @@ const flatListKeyExtractor = (item, index) => {
   return `${slugedRawKey}${generalConsts.slugSeparator}${itemId}`;
 };
 
-const FilterServerScreen = () => (
-  <DataTable>
-    <DataTableHeader />
-    <DataTableRows />
+const FilterServerScreen = ({ route: { params } }) => {
+  const [loading, setLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
 
-    {/* <DataTable.Pagination
-      page={1}
-      numberOfPages={3}
-      onPageChange={(page) => {
-        console.log(page);
-      }}
-      label="1-2 of 6"
-    /> */}
-  </DataTable>
-);
+  const getTableDataByParams = () => {
+    setLoading(true);
+    const filteredTableData = filterDataAccToParams(params);
+    setTableData(filteredTableData);
+    setLoading(false);
+  };
+  useFocusEffect(
+    useCallback(() => {
+      getTableDataByParams();
+      return () => {
+        setTableData([]);
+        setLoading(true);
+      };
+    }, []),
+  );
+
+  return (
+    <LoaderViewWrapper loading={loading}>
+      <DataTable>
+        <DataTableHeader />
+        <DataTableRows tableData={tableData} />
+      </DataTable>
+    </LoaderViewWrapper>
+  );
+};
 
 export default FilterServerScreen;

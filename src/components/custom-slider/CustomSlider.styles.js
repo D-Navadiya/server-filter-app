@@ -18,7 +18,7 @@ export default styleCreator({
     marginTop: spacing,
   },
   CustomSlider_labelText: {
-    width: wp('10%'),
+    width: wp('20%'),
     textAlign: 'center',
     color: colors.primary,
     fontSize: fontSizes.medium,

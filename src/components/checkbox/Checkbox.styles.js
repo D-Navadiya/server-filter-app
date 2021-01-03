@@ -11,7 +11,9 @@ export default styleCreator({
     marginBottom: spacing / 2,
     borderRadius: 20,
     paddingRight: spacing,
+    marginHorizontal: 2,
     backgroundColor: convertHexToRgbA(colors.primaryAccent, 15),
+    flex: 1,
   },
   Checkbox_touchableOpacity: {
     flex: 1,
