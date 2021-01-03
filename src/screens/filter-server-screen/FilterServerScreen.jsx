@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList } from 'react-native';
-import { DataTable } from 'react-native-paper';
+import { DataTable, Text } from 'react-native-paper';
 import slugify from 'slugify';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -12,6 +12,7 @@ import { generalConsts } from 'src/constants/GenericConstants';
 import LoaderViewWrapper from 'src/components/loader-view-wrapper';
 import { filterDataAccToParams } from 'utils/DataFiltration';
 import iConstants from './FilterServerScreen.constants';
+import styles from './FilterServerScreen.styles';
 
 const DataTableTitle = () =>
   dataTableColumns.map((column) => {
@@ -47,12 +48,22 @@ const flatListItem = ({ item }) => {
   );
 };
 
+const ListEmptyComponent = () => (
+  <Text style={styles.FilterServerScreen_listEmptyComponent}>
+    {iConstants.noMatchesText}
+  </Text>
+);
+
 const DataTableRows = ({ tableData }) => (
   // to lazy load the items
   <FlatList
     data={tableData}
+    contentContainerStyle={[
+      !tableData.length && styles.FilterServerScreen_flatlist__noData,
+    ]}
     renderItem={flatListItem}
     keyExtractor={flatListKeyExtractor}
+    ListEmptyComponent={<ListEmptyComponent />}
   />
 );
 
